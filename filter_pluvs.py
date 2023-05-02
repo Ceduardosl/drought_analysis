@@ -77,31 +77,3 @@ pr_df.to_excel("Dados/filtered_pluvs.xlsx", sheet_name = "Monthly_TS", na_rep = 
 print("{} Aprovados".format(count))
 print("### Finalizado ####")
 #     break
-#%%
-count_daily = pd.DataFrame({"Count": pluv_data.iloc[:,1].resample("M").count()})
-count_daily.insert(len(count_daily.columns), column = "Status", value = np.nan)
-count_daily.iloc[i,0]
-#%%
-for i in range(len(count_daily)):
-    if count_daily.index[i].month in [1,3,5,7,8,10,12]:
-        if count_daily.iloc[i,0] < 28:
-            count_daily.iloc[i, -1] = 0
-        else:
-            count_daily.iloc[i, -1] = 1
-                
-    if count_daily.index[i].month in [4,6,9,11]:
-        if count_daily.iloc[i,0] < 27:
-            count_daily.iloc[i, -1] = 0
-        else:
-            count_daily.iloc[i, -1] = 1
-                
-    if count_daily.index[i].month in [2]:
-        if count_daily.iloc[i,0] < 26:
-            count_daily.iloc[i, -1] = 0
-        else:
-            count_daily.iloc[i, -1] = 1
-        
-count_daily.insert(0, column = "Ano", value = count_daily.index.year)
-count_daily.insert(1, column = "Mes", value = count_daily.index.month)
-matrix = pd.pivot_table(data = count_daily, values = "Status", index = "Ano", columns = "Mes")
-    
