@@ -72,12 +72,16 @@ def download_hidroweb(station, startDate='', endDate='', dataType='',
 
 #%%
 if __name__ == "__main__":
-    list_pluvs = pd.read_csv("Dados/list_estacoes_poligonal.txt", sep = ";")
-    list_pluvs = list_pluvs.loc[list_pluvs["TipoEstaca"] == 2]
-    print(len(list_pluvs))
-    for i in list_pluvs.Codigo:
+    list_stations = pd.read_csv("Dados/list_estacoes_poligonal.txt", sep = ";")
+    list_pluvs = list_stations.loc[list_stations["TipoEstaca"] == 2]
+    list_fluvs = list_stations.loc[list_stations["TipoEstaca"] == 1]
+    print("{} Pluvs".format(len(list_pluvs)))
+    print("{} Fluvs".format(len(list_fluvs)))
+    for i,j in zip(list_pluvs.Codigo, list_fluvs.Codigo):
         print(i)
+        print(j)
         download_hidroweb(i, dataType = 2, path_folder = "{}/Dados/Pluvs".format(os.getcwd()))
+        download_hidroweb(j, dataType = 3, path_folder = "{}/Dados/Fluvs".format(os.getcwd()))
     print("Finalizado")
         
 # %%

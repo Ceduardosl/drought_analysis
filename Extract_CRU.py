@@ -1,3 +1,4 @@
+#%%
 #Extract multiple CRU data from multiple shapefiles
 __author__ = "Carlos Eduardo Sousa Lima"
 __license__ = "GPL"
@@ -13,7 +14,7 @@ import xarray as xr
 import matplotlib.pyplot as plt
 from glob import glob
 
-list_nc = glob("CRU_data/*.nc")
+list_nc = glob("Dados/CRU_data/*.nc")
 
 for dir_nc in list_nc:
     
@@ -24,7 +25,7 @@ for dir_nc in list_nc:
     df_point = pd.DataFrame({"lon": lon.flatten(), "lat": lat.flatten()})
     shp_point = gpd.GeoDataFrame(df_point, geometry = gpd.points_from_xy(df_point["lon"], df_point["lat"], crs="EPSG:4326"))
 
-    basins = glob("shapes/*.shp")
+    basins = glob("Shapes/Basins/*.shp")
 
     for basin in basins:
         shp_basin = gpd.read_file(basin)
@@ -40,4 +41,5 @@ for dir_nc in list_nc:
             var_ins.append(nc_data[var].sel(lat = ins_df["lat"][i], lon = ins_df["lon"][i]).values)
 
         var_df = ins_df[["lon", "lat"]].join(pd.DataFrame(var_ins, columns = nc_data["time"]))
-        var_df.to_csv("Extracted/{}_{}.csv".format(basin.split("\\")[1].split(".")[0], var), sep = ";", index = None, header = True)
+        var_df.to_csv("Dados/Extracted_data/{}_{}.csv".format(basin.split("\\")[-1].split(".")[0], var), sep = ";", index = None, header = True)
+#%%

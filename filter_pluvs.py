@@ -35,7 +35,7 @@ def daily_failure(df):
 
 #%%
 list_pluvs = glob("Dados/Pluvs/*.csv")
-pr_df = pd.DataFrame(index = pd.date_range("01-01-1985", "31-12-2021", freq = "M"))
+pr_df = pd.DataFrame(index = pd.date_range("01-01-1960", "31-12-2015", freq = "M"))
 # path_pluv = list_pluvs[153]
 count = 0
 for path_pluv in list_pluvs:
@@ -48,18 +48,17 @@ for path_pluv in list_pluvs:
     raw_data = pluv_data.loc[pluv_data.Consist == 1]
     cons_data = pluv_data.loc[pluv_data.Consist == 2]
 
-    ts_daily = pd.DataFrame({"Pr": np.nan}, index = pd.date_range("01-01-1985", "31-12-2021", freq = "D"))
+    ts_daily = pd.DataFrame({"Pr": np.nan}, index = pd.date_range("01-01-1960", "31-12-2015", freq = "D"))
     ts_daily.Pr = ts_daily.Pr.fillna(cons_data.Pr)
     ts_daily.Pr = ts_daily.Pr.fillna(raw_data.Pr)
     ts_daily = ts_daily.dropna()
 
-    if (ts_daily.index.year.min() <= 1985) & (ts_daily.index.year.max() >= 2014):
-        #garanti no mínimo 30 anos
+    if (ts_daily.index.year.min() <= 1960) & (ts_daily.index.year.max() >= 2015):
         # failure_matrix = daily_failure(ts_daily)[0]
         count_daily = daily_failure(ts_daily)
         idx_failure = count_daily.loc[count_daily.Status == 0].index
         # failure_matrix.insert(len(failure_matrix.columns), "check", failure_matrix.sum(axis = 1))
-        if count_daily.resample("Y").sum().Status.min() >= 10:
+        if count_daily.resample("Y").sum().Status.min() >= 0:
             count += 1
             print("Estação Aprovada - {}".format(pluv_id))
             # failure_matrix.to_csv("Dados/Pluvs/Failure_Matrix/FM_{}.csv".format(pluv_id))
@@ -76,4 +75,5 @@ pr_df.to_excel("Dados/filtered_pluvs.xlsx", sheet_name = "Monthly_TS", na_rep = 
 # pr_df.to_excel("Dados/filtered_pluvs.csv")
 print("{} Aprovados".format(count))
 print("### Finalizado ####")
+#%%
 #     break
