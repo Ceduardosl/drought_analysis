@@ -55,8 +55,12 @@ count_daily = daily_failure(ts_daily)
 idx_failure = count_daily.loc[count_daily.Status == 0].index
 ts_monthly = ts_daily.resample("M").mean()
 ts_monthly.Q.loc[idx_failure] = np.nan
-
+ts_max = ts_daily.resample("M").max()
+ts_min = ts_daily.resample("M").min()
+#%%
 fluv_df = fluv_df.merge(ts_monthly, left_index = True, right_index = True, how = "left")
-fluv_df.columns = [*fluv_df.columns[:-1], fluv_id]
+fluv_df = fluv_df.merge(ts_max, left_index = True, right_index = True, how = "left")
+fluv_df = fluv_df.merge(ts_min,  left_index = True, right_index = True, how = "left")
+fluv_df.rename(columns = {fluv_df.columns[0]: "mean", fluv_df.columns[1]: "max", fluv_df.columns[2]:"min"}, inplace = True)
 fluv_df.to_excel("Dados/streamflow_data.xlsx", sheet_name = "Monthly_TS", na_rep = -999, header = True, index = True)
 #%%
