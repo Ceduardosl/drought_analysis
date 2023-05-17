@@ -2,7 +2,9 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 import pymannkendall as mks
+import seaborn as sns
 
 def drought_class(df):
     #Extreme Dry (ED) - SPI <= -2.0 - index = 4
@@ -11,11 +13,11 @@ def drought_class(df):
     #Mild Drought - -1.00 < SPI < 0 - index = 1
     #No Drought - SPI >= 0 - index = 0
 
-    df.loc[df >= 0] = np.int16(0)
-    df.loc[(df > -1) & (df < 0)] = np.int16(1)
-    df.loc[(df > -1.5) & (df <= -1.0)] = np.int16(2)
-    df.loc[(df > -2) & (df <= -1.5)] = np.int16(3)
-    df.loc[df <= -2] = np.int16(4)
+    df.loc[df >= 0] = 0
+    df.loc[(df > -1) & (df < 0)] = 1
+    df.loc[(df > -1.5) & (df <= -1.0)] = 2
+    df.loc[(df <= -1.5)] = 3
+    # df.loc[df <= -2] = 4
     
     df = df.astype("int16")
     
@@ -24,7 +26,11 @@ def drought_class(df):
 def transition_matrix(n_class, ts):
     #ts = time series (pandas.series) não um dataframe
     #n_class = número de classes para as transições
-    M = np.zeros((n_class + 1, n_class + 1))
+    np.seterr(invalid = "ignore") 
+    #não emitir mensagem de erro caso haja divisão por zero
+    #o resultado dessa divisão será np.nan
+
+    M = np.zeros((n_class, n_class))
 
     for i,j in zip(ts, ts[1:]):
         M[i][j] += 1
@@ -56,18 +62,80 @@ M_spi_p2 = transition_matrix(n_class = 4, ts = spi_p2)
 M_sri_p1 = transition_matrix(n_class = 4, ts = sri_p1)
 M_sri_p2 = transition_matrix(n_class = 4, ts = sri_p2)
 
+M_spi_p1 = pd.DataFrame(M_spi_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+M_spi_p2 = pd.DataFrame(M_spi_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+M_sri_p1 = pd.DataFrame(M_sri_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+M_sri_p2 = pd.DataFrame(M_sri_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+
 #%%
-n_class = 4
+# fig, ax = plt.subplots(2,2,dpi = 600, figsize = (8, 5.5), sharex = True, sharey = True)
+fig = plt.figure(dpi = 600, figsize = (8, 6))
+gs = GridSpec(2,2, figure = fig, wspace = 0.15, hspace = 0.35)
+# gs.tight_layout(figure = fig, h_pad = 2, w_pad = 1.5)
+ax1 = fig.add_subplot(gs[0,0])
+ax2 = fig.add_subplot(gs[0,1])
+ax3 = fig.add_subplot(gs[1,0])
+ax4 = fig.add_subplot(gs[1,1])
 
-M = np.zeros((n_class + 1, n_class + 1))
+sns.heatmap(M_spi_p1, ax = ax1, cmap = "binary",
+        linecolor = "black", linewidths = 0.5,
+        annot = M_spi_p1.multiply(100).round(2).astype("str") + "%",
+        fmt = "", cbar = False)
 
+sns.heatmap(M_spi_p2, ax = ax2, cmap = "binary",
+        linecolor = "black", linewidths = 0.5,
+        annot = M_spi_p2.multiply(100).round(2).astype("str") + "%",
+        fmt = "", cbar = False)
 
-for i,j in zip(sri_p1, sri_p1[1:]):
-    M[i][j] += 1
+sns.heatmap(M_sri_p1, ax = ax3, cmap = "binary",
+        linecolor = "black", linewidths = 0.5,
+        annot = M_sri_p1.multiply(100).round(2).astype("str") + "%",
+        fmt = "", cbar = False)
 
-M = M/M.sum(axis = 1, keepdims = True)
+sns.heatmap(M_sri_p2, ax = ax4, cmap = "binary",
+        linecolor = "black", linewidths = 0.5,
+        annot = M_sri_p2.multiply(100).round(2).astype("str") + "%",
+        fmt = "", cbar = False)
+
+ax1.set_title("a) SPI-12 - P1", loc = "left")
+ax2.set_title("b) SPI-12 - P2", loc = "left")
+ax3.set_title("c) SRI-12 - P1", loc = "left")
+ax4.set_title("d) SRI-12 - P2", loc = "left")
+
 #%%
+state = [1,0,0,0]
+state_list = []
 
+for x in range(1, 10, 1):
+    state = np.dot(state, M_sri_p1)
+    state_list.append(state)
 
+state_df = pd.DataFrame(state_list)
 
+#%%
+state = [1,0]
+
+P = np.array([
+    [1/3, 2/3],
+    [1/2, 1/2]]
+)
+P1 = P
+for x in range(1,10,1):
+    P1 = P1@P1
+
+s = np.dot(state, P1)
+
+#%%
+state= [1,0]
+state_list = []
+P = np.array([
+    [1/3, 2/3],
+    [1/2, 1/2]]
+)
+for x in range(10):
+    state = np.dot(state, P)
+    state_list.append(state)
+state_df = pd.DataFrame(state_list)
 # %%
+fig, ax = plt.subplots(dpi = 600)
+state_df.plot(ax = ax)
