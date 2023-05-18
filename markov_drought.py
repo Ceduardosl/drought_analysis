@@ -38,7 +38,24 @@ def transition_matrix(n_class, ts):
     M = M/M.sum(axis = 1, keepdims = True)
     #sri_p1 não ocorre classe  4 - Jogar zero para esses valores
     return M
+
+def stationary_distr(M):
+    M = np.array(M)
+    state = np.array([np.random.dirichlet((1,1,1,1))])
+    state_list = state
+    count_conv = 0
+    for x in range(1,1000, 1):
+        state = np.dot(state, M)
+        state_list = np.append(state_list, state, axis = 0)
+        if np.max(abs(state_list[x] - state_list[x-1])) <= 10**-8:
+            count_conv += 1
+            if count_conv >= 5:
+                break
+            else:
+                continue
+    return state_list
 #%%
+
 spi_df = pd.read_csv("Dados/spi.csv", index_col = 0)
 spi_df.index = pd.to_datetime(spi_df.index)
 sri_df = pd.read_csv("Dados/sri.csv", index_col = 0)
@@ -66,6 +83,16 @@ M_spi_p1 = pd.DataFrame(M_spi_p1, columns = ["SS", "SL", "SM", "SSE"], index = [
 M_spi_p2 = pd.DataFrame(M_spi_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
 M_sri_p1 = pd.DataFrame(M_sri_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
 M_sri_p2 = pd.DataFrame(M_sri_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+
+#%%
+s_spi_p1 = pd.DataFrame(stationary_distr(M_spi_p1),
+                    columns = ["SS", "SL", "SM", "SSE"])
+s_spi_p2 = pd.DataFrame(stationary_distr(M_spi_p2),
+                    columns = ["SS", "SL", "SM", "SSE"])
+s_sri_p1 = pd.DataFrame(stationary_distr(M_sri_p1),
+                    columns = ["SS", "SL", "SM", "SSE"])
+s_sri_p2 = pd.DataFrame(stationary_distr(M_sri_p2),
+                    columns = ["SS", "SL", "SM", "SSE"])
 
 #%%
 # fig, ax = plt.subplots(2,2,dpi = 600, figsize = (8, 5.5), sharex = True, sharey = True)
@@ -102,40 +129,27 @@ ax2.set_title("b) SPI-12 - P2", loc = "left")
 ax3.set_title("c) SRI-12 - P1", loc = "left")
 ax4.set_title("d) SRI-12 - P2", loc = "left")
 
+
 #%%
+#####################TESTES###################
 state = [1,0,0,0]
 state_list = []
 
-for x in range(1, 10, 1):
+for x in range(1, 100, 1):
     state = np.dot(state, M_sri_p1)
     state_list.append(state)
 
-state_df = pd.DataFrame(state_list)
+state_df = pd.DataFrame(state_list, columns = ["SS", "SL", "SM", "SSE"])
 
 #%%
-state = [1,0]
-
-P = np.array([
-    [1/3, 2/3],
-    [1/2, 1/2]]
-)
-P1 = P
-for x in range(1,10,1):
-    P1 = P1@P1
-
-s = np.dot(state, P1)
-
-#%%
-state= [1,0]
+state = [1,0,0,0]
 state_list = []
-P = np.array([
-    [1/3, 2/3],
-    [1/2, 1/2]]
-)
-for x in range(10):
-    state = np.dot(state, P)
-    state_list.append(state)
-state_df = pd.DataFrame(state_list)
+M = np.array(M_sri_p1)
+for x in range(1,10,1):
+    M = M@M
+
+state = np.dot(state, M) 
+
+   
+
 # %%
-fig, ax = plt.subplots(dpi = 600)
-state_df.plot(ax = ax)
