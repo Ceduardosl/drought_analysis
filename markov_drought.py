@@ -18,6 +18,8 @@ def drought_class(df):
     df.loc[(df > -1.5) & (df <= -1.0)] = 2
     df.loc[(df <= -1.5)] = 3
     # df.loc[df <= -2] = 4
+    #não ocorre ED no P1, então agrupa-se a ED e SD em uma única classe
+    #evitar divisão por 0
     
     df = df.astype("int16")
     
@@ -27,8 +29,6 @@ def transition_matrix(n_class, ts):
     #ts = time series (pandas.series) não um dataframe
     #n_class = número de classes para as transições
     np.seterr(invalid = "ignore") 
-    #não emitir mensagem de erro caso haja divisão por zero
-    #o resultado dessa divisão será np.nan
 
     M = np.zeros((n_class, n_class))
 
@@ -36,7 +36,7 @@ def transition_matrix(n_class, ts):
         M[i][j] += 1
     
     M = M/M.sum(axis = 1, keepdims = True)
-    #sri_p1 não ocorre classe  4 - Jogar zero para esses valores
+
     return M
 
 def stationary_distr(M):
@@ -93,9 +93,19 @@ s_sri_p1 = pd.DataFrame(stationary_distr(M_sri_p1),
                     columns = ["SS", "SL", "SM", "SSE"])
 s_sri_p2 = pd.DataFrame(stationary_distr(M_sri_p2),
                     columns = ["SS", "SL", "SM", "SSE"])
-
 #%%
-# fig, ax = plt.subplots(2,2,dpi = 600, figsize = (8, 5.5), sharex = True, sharey = True)
+s_df = pd.concat([s_spi_p1.iloc[-1:],
+            s_spi_p2.iloc[-1:],
+            s_sri_p1.iloc[-1:],
+            s_sri_p2.iloc[-1:]])
+
+s_df.index = ["SPI-12|P1(1935 - 1984)",
+            "SPI-12|P2(1985 - 2020)",
+            "SRI-12|P1(1935 - 1984)",
+            "SRI-12|P2(1985 - 2020)"]
+
+s_df.to_csv("Dados/stationary_distr_spi_sri.csv", index = True, header = True)
+#%%
 fig = plt.figure(dpi = 600, figsize = (8, 6))
 gs = GridSpec(2,2, figure = fig, wspace = 0.15, hspace = 0.35)
 # gs.tight_layout(figure = fig, h_pad = 2, w_pad = 1.5)
@@ -128,7 +138,7 @@ ax1.set_title("a) SPI-12 - P1", loc = "left")
 ax2.set_title("b) SPI-12 - P2", loc = "left")
 ax3.set_title("c) SRI-12 - P1", loc = "left")
 ax4.set_title("d) SRI-12 - P2", loc = "left")
-
+fig.savefig("Figuras/Transition_Matrix.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
 
 #%%
 #####################TESTES###################
