@@ -39,7 +39,7 @@ def transition_matrix(n_class, ts):
 
     if np.all(M.sum(axis = 1) != 1):
         print("### Há linhas em que o somatório das colunas é diferente de 1 ###")
-    
+
     return M
 
 def stationary_distr(M):
@@ -170,11 +170,11 @@ if __name__ == '__main__':
 
     plot_transition_matrix([M_spi_p1, M_spi_p2, M_sri_p1, M_sri_p2],
                         ["a) SPI-12 - P1", "b) SPI-12 - P2",
-                            "c) SRI-12 - P1", "d) SRI-12 - P1"],
+                            "c) SRI-12 - P1", "d) SRI-12 - P2"],
                             "Figuras/SPI_SRI_Transition_Matrix")
 
     plot_transition_matrix([M_spei_p1, M_spei_p2, M_sri_p1, M_sri_p2],
                         ["a) SPEI-12 - P1", "b) SPEI-12 - P2",
-                            "c) SRI-12 - P1", "d) SRI-12 - P1"],
+                            "c) SRI-12 - P1", "d) SRI-12 - P2"],
                             "Figuras/SPEI_SRI_Transition_Matrix")
 # %%
