@@ -14,14 +14,14 @@ fig, ax = plt.subplots(dpi = 600)
 ax.bar(EPQ_clim.Q.index, EPQ_clim.Q,
     tick_label = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"])
 ax.set_ylabel("Vazão (m³/s)")
-ax.set_title("a) Vazão", loc = "left")
+ax.set_title("b) Vazão", loc = "left")
 fig.savefig("Figuras/Vazao_Climatologica.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
 #%%
 fig1, ax1 = plt.subplots(dpi = 600)
 ax1.bar(EPQ_clim.Pr.index, EPQ_clim.Pr,
     tick_label = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"])
 ax1.set_ylabel("Precipitação (mm)")
-ax1.set_title("b) Precipitação", loc = "left")
+ax1.set_title("a) Precipitação", loc = "left")
 fig1.savefig("Figuras/Pr_Climatologica.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
 #%%
 fig2, ax2 = plt.subplots(dpi = 600)

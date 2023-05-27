@@ -46,41 +46,27 @@ fig = plt.figure(dpi = 600, figsize = (10, 8))
 gs = GridSpec(3,1, figure = fig, wspace = 0, hspace = 0.3)
 ax1 = fig.add_subplot(gs[0])
 ax2 = fig.add_subplot(gs[1], sharex = ax1)
-ax3 = fig.add_subplot(gs[2], sharex = ax1)
 plt.setp(ax1.get_xticklabels(), visible=False)
-plt.setp(ax2.get_xticklabels(), visible=False)
 # ax1.sharey(ax3)
 # ax2.sharey(ax3)
-ax1.axvline(x = df_p2.index[0], c = "black", ls = "--", zorder = 1)
-ax1.plot(annual_df.Q, c = "black", zorder = 3)
-ax1.plot(m_mov.Q_mov, c = "blue", label = "Média Móvel (10 anos)", zorder = 2)
-ax1.plot(df_p2.index,
+ax2.axvline(x = df_p2.index[0], c = "black", ls = "--", zorder = 1)
+ax2.plot(annual_df.Q, c = "black", zorder = 3)
+ax2.plot(m_mov.Q_mov, c = "blue", label = "Média Móvel (10 anos)", zorder = 2)
+ax2.plot(df_p2.index,
         mks_df.q_p2.a*range(0, len(df_p2)) + mks_df.q_p2.b, 
         c = "red", label = "TendÊncia (P2)", zorder = 2)
 
-ax2.axvline(x = df_p2.index[0], c = "black", ls = "--", zorder = 1)
-ax2.plot(annual_df.Pr, c = "black", zorder = 3)
-ax2.plot(m_mov.Pr_mov, c = "blue", label = "Média Móvel (10 anos)", zorder = 2)
+ax1.axvline(x = df_p2.index[0], c = "black", ls = "--", zorder = 1)
+ax1.plot(annual_df.Pr, c = "black", zorder = 3)
+ax1.plot(m_mov.Pr_mov, c = "blue", label = "Média Móvel (10 anos)", zorder = 2)
 
-ax3.axvline(x = df_p2.index[0], c = "black", ls = "--", zorder = 1)
-ax3.plot(annual_df.ETP, c = "black", zorder = 3)
-ax3.plot(m_mov.ETP_mov, c = "blue", label = "Média Móvel (10 anos)", zorder = 2)
-ax3.plot(df_p2.index,
-    mks_df.ETP_p2.a*range(0, len(df_p2)) + mks_df.ETP_p2.b,
-    c = "red", label = "Tendência (P2)", zorder = 2)
-# ax3.plot(annual_df.index,
-#     mks_df.ETP_t.a*range(0, len(annual_df)) + mks_df.ETP_t.b,
-#     c = "orange", label = "Trend (P1+P2)")
-ax1.set_ylabel("Vazão (m³/s)")
-ax2.set_ylabel("Precipitação (mm)")
-ax3.set_ylabel("ETP (mm)")
-ax3.set_xlabel("Anos")
-ax1.set_title("a) Vazão média anual", loc = "left")
-ax2.set_title("b) Precipitação anual", loc = "left")
-ax3.set_title("c) ETP anual", loc = "left")
-ax1.legend()
+ax2.set_ylabel("Vazão (m³/s)")
+ax1.set_ylabel("Precipitação (mm)")
+ax2.set_xlabel("Anos")
+ax2.set_title("a) Vazão média anual", loc = "left")
+ax1.set_title("b) Precipitação anual", loc = "left")
 ax2.legend()
-ax3.legend()
+ax1.legend()
 
 fig.savefig("Figuras/annual_TS.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
 #%%
