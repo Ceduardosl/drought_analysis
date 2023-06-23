@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import pymannkendall as mks
 import seaborn as sns
-
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams.update({'font.size': 9})
 def drought_class(df):
     #Extreme Dry (ED) - SPI <= -2.0 - index = 4
     #Severely Dry (SD) - -2.00 < SPI <= -1.50 - index = 3
@@ -62,32 +63,23 @@ def plot_transition_matrix(list_df, list_titles, output_path):
     fig = plt.figure(dpi = 600, figsize = (8, 6))
 
     gs = GridSpec(2,2, figure = fig, wspace = 0.15, hspace = 0.35)
-    # gs.tight_layout(figure = fig, h_pad = 2, w_pad = 1.5)
     ax1 = fig.add_subplot(gs[0,0])
     ax2 = fig.add_subplot(gs[0,1])
     ax3 = fig.add_subplot(gs[1,0])
     ax4 = fig.add_subplot(gs[1,1])
 
-    sns.heatmap(list_df[0], ax = ax1, cmap = "binary",
+    for i, j in zip (list_df, [ax1, ax2, ax3, ax4]):
+        im = sns.heatmap(i, ax = j, cmap = "gray_r",
+            vmin = 0, vmax = 1,
             linecolor = "black", linewidths = 0.5,
-            annot = list_df[0].multiply(100).round(2).astype("str") + "%",
+            annot = i.multiply(100).round(2).astype("str") + "%",
             fmt = "", cbar = False)
 
-    sns.heatmap(list_df[1], ax = ax2, cmap = "binary",
-            linecolor = "black", linewidths = 0.5,
-            annot = list_df[1].multiply(100).round(2).astype("str") + "%",
-            fmt = "", cbar = False)
-
-    sns.heatmap(list_df[2], ax = ax3, cmap = "binary",
-            linecolor = "black", linewidths = 0.5,
-            annot = list_df[2].multiply(100).round(2).astype("str") + "%",
-            fmt = "", cbar = False)
-
-    sns.heatmap(list_df[3], ax = ax4, cmap = "binary",
-            linecolor = "black", linewidths = 0.5,
-            annot = list_df[3].multiply(100).round(2).astype("str") + "%",
-            fmt = "", cbar = False)
-
+    mappable = im.get_children()[0]
+    cbar_ax = plt.colorbar(mappable, ax = [ax2,ax4], orientation = 'vertical')
+    cbar_ax.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    cbar_ax.set_ticklabels(["0%", "20%", "40%", "60%", "80%", "100%"])
+    cbar_ax.set_label("Transition Probabilities")
     ax1.set_title(list_titles[0], loc = "left")
     ax2.set_title(list_titles[1], loc = "left")
     ax3.set_title(list_titles[2], loc = "left")
@@ -131,26 +123,26 @@ if __name__ == '__main__':
     M_sri_p1 = transition_matrix(n_class = 4, ts = sri_p1)
     M_sri_p2 = transition_matrix(n_class = 4, ts = sri_p2)
 
-    M_spi_p1 = pd.DataFrame(M_spi_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
-    M_spi_p2 = pd.DataFrame(M_spi_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
-    M_spei_p1 = pd.DataFrame(M_spei_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
-    M_spei_p2 = pd.DataFrame(M_spei_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
-    M_sri_p1 = pd.DataFrame(M_sri_p1, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
-    M_sri_p2 = pd.DataFrame(M_sri_p2, columns = ["SS", "SL", "SM", "SSE"], index = ["SS", "SL", "SM", "SSE"])
+    M_spi_p1 = pd.DataFrame(M_spi_p1, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
+    M_spi_p2 = pd.DataFrame(M_spi_p2, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
+    M_spei_p1 = pd.DataFrame(M_spei_p1, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
+    M_spei_p2 = pd.DataFrame(M_spei_p2, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
+    M_sri_p1 = pd.DataFrame(M_sri_p1, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
+    M_sri_p2 = pd.DataFrame(M_sri_p2, columns = ["ND", "mD", "MD", "SED"], index = ["ND", "mD", "MD", "SED"])
 
 
     s_spi_p1 = pd.DataFrame(stationary_distr(M_spi_p1),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
     s_spi_p2 = pd.DataFrame(stationary_distr(M_spi_p2),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
     s_spei_p1 = pd.DataFrame(stationary_distr(M_spei_p1),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
     s_spei_p2 = pd.DataFrame(stationary_distr(M_spei_p2),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
     s_sri_p1 = pd.DataFrame(stationary_distr(M_sri_p1),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
     s_sri_p2 = pd.DataFrame(stationary_distr(M_sri_p2),
-                        columns = ["SS", "SL", "SM", "SSE"])
+                        columns = ["ND", "mD", "MD", "SED"])
 
     s_df = pd.concat([s_spi_p1.iloc[-1:],
                 s_spi_p2.iloc[-1:],
@@ -172,9 +164,4 @@ if __name__ == '__main__':
                         ["a) SPI-12 - P1", "b) SPI-12 - P2",
                             "c) SRI-12 - P1", "d) SRI-12 - P2"],
                             "Figuras/SPI_SRI_Transition_Matrix")
-
-    plot_transition_matrix([M_spei_p1, M_spei_p2, M_sri_p1, M_sri_p2],
-                        ["a) SPEI-12 - P1", "b) SPEI-12 - P2",
-                            "c) SRI-12 - P1", "d) SRI-12 - P2"],
-                            "Figuras/SPEI_SRI_Transition_Matrix")
 # %%
