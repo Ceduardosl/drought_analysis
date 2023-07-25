@@ -28,17 +28,17 @@ daily_data.columns = ["Consist", "Q"]
 #%%
 list_r = []
 dict_period = {
-    "P1": [1935, 1954],
-    "P2": [1955, 1969],
-    "P3": [1970, 1984],
-    "P4": [1985, 2000],
-    "P5": [2001, 2010],
-    "P6": [2011, 2020]
+    "SP1": [1935, 1954],
+    "SP2": [1955, 1969],
+    "SP3": [1970, 1984],
+    "SP4": [1985, 2000],
+    "SP5": [2001, 2010],
+    "SP6": [2011, 2020]
 }
 fig, ax = plt.subplots(dpi = 600)
 
 plt.yscale("log")
-for p, color in zip(["P1", "P2", "P3", "P4", "P5", "P6"], ["black", "blue", "purple", "green", "darkorange", "red"]):
+for p, color in zip(["SP1", "SP2", "SP3", "SP4", "SP5", "SP6"], ["black", "blue", "purple", "green", "darkorange", "red"]):
     df_daily = pd.DataFrame({"Q": np.nan},
             index = daily_data.loc[
                         (daily_data.index.year >= dict_period[p][0])& 
@@ -58,20 +58,22 @@ ax.legend(framealpha = 1)
 ax.set_title("Flow-Duration Curves", loc = "left")
 ax.set_ylabel("Streamflow (m³/s)")
 ax.set_xlabel("Probability of Exceedance (%)")
-fig.savefig("Figuras/Curvas_Permanencia.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Curvas_Permanencia_600.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Curvas_Permanencia_300.png", dpi = 300, bbox_inches = "tight", facecolor = "w")
+
 df_r = pd.DataFrame(list_r, columns = ["Period", "Q95"])
 df_r.to_csv("Dados/Q95.csv", index = False, header = True, sep = ";")
 #%%
 list_r = []
 dict_period = {
-    "P1": [1935, 1954],
-    "P2": [1955, 1969],
-    "P3": [1970, 1984],
-    "P4": [1985, 2000],
-    "P5": [2001, 2010],
-    "P6": [2011, 2020]
+    "SP1": [1935, 1954],
+    "SP2": [1955, 1969],
+    "SP3": [1970, 1984],
+    "SP4": [1985, 2000],
+    "SP5": [2001, 2010],
+    "SP6": [2011, 2020]
 }
-for p in ["P1", "P2", "P3", "P4", "P5", "P6"]:
+for p in ["SP1", "SP2", "SP3", "SP4", "SP5", "SP6"]:
     daily_data = daily_data.loc[(daily_data.index.year >= 1935) & (daily_data.index.year <= 2020)]
     df_daily = pd.DataFrame({"Q": np.nan},
             index = daily_data.loc[
@@ -92,15 +94,16 @@ for p in ["P1", "P2", "P3", "P4", "P5", "P6"]:
     ax.set_title("{}) Q-Q Plot Gumbel - Min. Annual Moving Average (7 dias) ".format(p),
             loc = "left")
     ax.set_title(None, loc = "center")
-    fig.savefig("Figuras/{}_Q-Q_plot_Gumbel_m_mov_7.png".format(p),
+    fig.savefig("Figuras/{}_Q-Q_plot_Gumbel_m_mov_7_600.png".format(p),
         dpi = 600,  bbox_inches = "tight", facecolor = "w")
-
+    fig.savefig("Figuras/{}_Q-Q_plot_Gumbel_m_mov_7_300.png".format(p),
+        dpi = 300,  bbox_inches = "tight", facecolor = "w")
     list_r.append([
         sc.kstest(min_annual.Q, cdf = "gumbel_l", args = sc.gumbel_l.fit(min_annual.Q))[0],
         sc.kstest(min_annual.Q, cdf = "gumbel_l", args = sc.gumbel_l.fit(min_annual.Q))[1],
         sc.gumbel_l.ppf(1-(1/10), *sc.gumbel_l.fit(min_annual.Q))])
     
-df_r = pd.DataFrame(list_r, index = ["P1", "P2", "P3", "P4", "P5", "P6"],
+df_r = pd.DataFrame(list_r, index = ["SP1", "SP2", "SP3", "SP4", "SP5", "SP6"],
         columns = ["stats_kms", "p-value", "q7,10"])
 df_r.to_csv("Dados/q_7,10_Gumbel_l.csv", index = True, header = True)
 #%%
@@ -112,12 +115,12 @@ df_r.to_csv("Dados/q_7,10_Gumbel_l.csv", index = True, header = True)
 #     "P5": [2011, 2020]
 # }
 dict_period = {
-    "P1": [1935, 1955],
-    "P2": [1955, 1970],
-    "P3": [1970, 1985],
-    "P4": [1985, 2001],
-    "P5": [2001, 2011],
-    "P6": [2011, 2020]
+    "SP1": [1935, 1955],
+    "SP2": [1955, 1970],
+    "SP3": [1970, 1985],
+    "SP4": [1985, 2001],
+    "SP5": [2001, 2011],
+    "SP6": [2011, 2020]
 }
 daily_data = daily_data.loc[(daily_data.index.year >= 1935) & (daily_data.index.year <= 2020)]
 df_daily = pd.DataFrame({"Q": np.nan},
@@ -129,7 +132,7 @@ min_annual.index = min_annual.index.year
 mks_test = mks.original_test(min_annual)
 
 fig, ax = plt.subplots(dpi = 600)
-for p, color in zip(["P1", "P2", "P3", "P4", "P5", "P6"], ["black", "blue", "purple", "green", "darkorange", "red"]):
+for p, color in zip(["SP1", "SP2", "SP3", "SP4", "SP5", "SP6"], ["black", "blue", "purple", "green", "darkorange", "red"]):
     ax.plot(min_annual.loc[
         (min_annual.index >= dict_period[p][0]) &
         (min_annual.index <= dict_period[p][1])],
@@ -143,5 +146,7 @@ ax.legend(ncol = 2, loc = "best")
 ax.grid(zorder = 1)
 ax.set_ylabel("Streamflow (m³/s)")
 ax.set_title("Minimum Annual Daily Streamflow", loc = "left") 
-fig.savefig("Figuras/Q_min_anual.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Q_min_anual_600.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Q_min_anual_300.png", dpi = 300, bbox_inches = "tight", facecolor = "w")
+
 # %%

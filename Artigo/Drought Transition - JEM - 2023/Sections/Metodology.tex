@@ -1,0 +1,203 @@
+\section{Material and Methods}
+    \subsection{Study Area}
+        The Figure \ref{fig:Clima} shows the climatological precipitation and streamflow for the adopted basin. One can observe a well-defined seasonality of the precipitation (Figure \ref{fig:Clima}a), clearly distinguishing two seasons: i) dry season, between May and September and ii) wet season, between October and April.
+        
+        The impact of this well-defined seasonality can be seen in the behavior of the streamflow throughout the year. As presented in the Figure \ref{fig:Clima}b, the monthly streamflow shows a decreasing behavior between May and September, reaching an annual minimum monthly flow of 192 \(m^3/s\), on the other hand, an increasing behavior is observed between October and April, reaching the highest levels with flows above 300 \(m^3/s\) between January and April. This behavior exposes a non-intermittency of the streamflows throughout the year despite the aforementioned dry season, indicating a flow regularization in the analyzed watershed.
+
+        As pointed by \citet{Lucas2020}, the Urucuia Aquifer System (UAS) is located in the west of the Brazilian state of Bahia. This aquifer is an important water source for the SFRB and one of the main mechanisms for the regularization of streamflows during the dry season.
+        
+        Due to the absence of large artificial reservoirs or other regularization structures in the analyzed watershed, it is assumed that UAS is the main mechanism responsible for the non-intermittency of streamflow during the year in this region
+        
+        \begin{figure*}
+            \centering
+                \begin{minipage}[t]{0.49\linewidth}
+                    \includegraphics[width = \linewidth]{
+                        figs/Pr_Clim.png}
+                \end{minipage}
+                \hfill    
+                \begin{minipage}[t]{0.49\linewidth}
+                    \includegraphics[width = \linewidth]{
+                        figs/Vazao_Clim.png}
+                \end{minipage}
+                
+            \caption{
+                Climatology of the a) Precipitation and b) Streamflow for the drainage area of  stream gauge 46902000 based on observed data from 1934 to 2020.
+            }
+            \label{fig:Clima}
+        \end{figure*}
+
+    \subsection{Used Data}      
+        \subsubsection{Hydrometeorological Data}
+            In the present study, hydrometeorological data of precipitation and streamflow were used. The streamflow data were obtained from the measured data at the stream gauge highlighted in the Figure (ID 46902000), available in the National Water Agency's (ANA, from portuguese Agência Nacional de Águas) HIDROWEB database. The daily streamflow time series obtained for this station showed few daily gaps in each of the observed months, making it possible to adopt an uninterrupted period between 1935 and 2020 (86 years).
+    
+            In relation to precipitation data, the rain gauge stations within and in the vicinity of the drainage area of the 46902000 stream gauge had long gaps and/or considerably short series relative to the size of the available flow series. In order to not exclude streamflow data to enable the use of the above-mentioned observed precipitation information, it was chosen to use the Global Precipitation Climatology Centre (GPCC) monthly precipitation estimates for the entire land surface, getting the data for the period from 1935 to 2020
+    
+            In this study, we use monthly precipitation totals from the GPCC Full Data Monthly Product Version 2022 provided on a regular grid with a spatial resolution of 1° (longitude and latitude). This product is based on approximately 86,000 stations with almost 10 years of records, providing a regular grid of monthly precipitation totals from 1891 to 2022 at various spatial resolutions: 0.25°, 0.5°, 1.0°, and 2.5°\citep{GPCC:2022}. 
+    
+            The average precipitation of the basin was obtained by the arithmetic mean between the grid points contained in the rectangle formed by the its maximum and minimum latitudes and longitudes.
+        \subsubsection{Land Use and Land Cover Data}
+    \blindtext
+    
+    \subsection{Drought Index}
+        In the present study, hydrological and meteorological droughts were characterized by the Standard Precipitation Index (SPI) \citep{mckee1993} and the Standard Runoff Index (SRI) \citep{Shukla2008}, respectively.
+
+        The SPI consists in a comparison between of the accumulated precipitaiton in \textit{n}-month window (scale) with the Cumulative Distribution Function (CDF) of the long-term time series of accumulated precipitation in the same scale. The procedures for its determination can be summarized in three steps: i) determining the CDF of the long-term time series of accumulated precipitation in a \textit{n}-month; ii) determine the probabilities of non-exceedence of the values of this time series and iii) apply these probabilities in the inverse function of a standard normal distribution, returning the SPI \citep{mckee1993, Mishra2007}. 
+        
+        The determination of the SRI, in turn, adopts the same procedures aforementioned for the determination of the SPI, however, considering the streamflow time series as input data \citep{Shukla2008}. Thus, both indexes, SPI and SRI, can be interpreted as the number of standard deviations of a specific value in a time series in relation to its long-term mean.
+
+        In this study, a 12-month scale (\textit{n} = 12) was adopted for both SPI and SRI. After determining the monthly time series of SPI-12 and SRI-12 from 1935 to 2020, the last month (December) of each year of the time series was adopted, resulting in the annual time series of these indexes. The use of the annual series eliminates the dependence between two consecutive values of the monthly series. As pointed by \citet{Estacio2022}, the SPI-12 monthly time series has a dependency between two consecutive values, because they would differ by only 1 of the 12 values that are accumulated to determine the index on this scale.
+
+        The gamma CDF was adopted to fit the aggregated time series of precipitation and streamflow and to determine the probabilities of non-exceedence of their values. The good fit of this distribution to the used data can be seen in the Quantile-Quantile plot (Q-Q plot) presented in Figure \ref{fig:probplot}. The Q-Q plot shows determination coefficients (\(R^2\)) greater than or equal to 0.99 between the observed quantiles, from the aggregated 12-month time series, and the theoretical quantiles, from the CDF gamma fitted to these time series.
+
+        \begin{figure*}
+            \centering
+                \begin{minipage}[t]{0.49\linewidth}
+                    \includegraphics[width = \linewidth]{
+                    figs/Q-Q_Plot_Gamma_Pr-12.png}
+                \end{minipage}
+                \hfill    
+                \begin{minipage}[t]{0.49\linewidth}
+                    \includegraphics[width = \linewidth]{
+                    figs/Q-Q_Plot_Gamma_Q-12.png}
+                \end{minipage}            
+            \caption{
+                Q-Q plot of Gamma distribution for the aggregated a) precipitation and b) streamflow series on a 12-month scale from 1935 to 2020
+            }
+            \label{fig:probplot}
+        \end{figure*}
+        
+        The density function of a continuous random variable \(x\) that has a Gamma Distribution is given in the Equation \ref{Gamma_pdf}:
+        
+        \begin{equation}
+            f(x) = \frac{({\lambda}x)^{\alpha}}{\Gamma(\alpha)}e^{-{\lambda}x}\frac{1}{x} = \frac{{\lambda}^{\alpha}}{\Gamma(\alpha)}x^{{\alpha}-1}e^{-{\lambda}x}
+            \label{Gamma_pdf}
+        \end{equation}
+
+        where: $\lambda$ is the rate parameter, $\alpha$ is the shape parameter and $\Gamma(\alpha)$ is the Gamma Function, defined in Equation \ref{Gamma_fun}:
+
+        \begin{equation}
+            \Gamma(\alpha) = \int_{0}^{\infty}x^{\alpha}e^{-x}\frac{dx}{x}
+            \label{Gamma_fun}
+        \end{equation}
+
+        $\Gamma(\alpha)$ and therefore $f(x)$ are defined for \({\forall}x,{\forall}\alpha, {\forall}\lambda > 0\), with \(x, {\alpha}, {\lambda} \in \Re\) \citep{Blitzstein2014}.
+
+        As mentioned by \citet{Estacio2022}, due to the non-definition of the Gamma distribution for $x = 0$, a correction must be made to the non-exceedance probabilities obtained from the CDF Gamma. However, as well as \citet{Estacio2022}, this correction was not performed in this study, because it is completely unlikely that the aggregate precipitation over the year is equal to zero
+        
+
+        
+    \subsection{Markov Chain}
+    
+        A Markov chain can be defined as a sequence of random variables contained in a vector \(\vec{X} = [X_{0}, X_{1}, \dots, X_{n}]\) that take on values from a state vector \(\vec{s} = [s_{1}, s_{2}, \dots, s_{k}]\) and following the relation expressed in Equation \ref{markov_prop}, for $n\geq0$
+        
+        \begin{equation}
+            \resizebox{\linewidth}{!}
+
+                {P(X_{n+1} = j|X_{n}=i_{n}, X_{n-1}=i_{n-1}, \dots, X_{0}=i_{0}) = P(X_{n+1} = j|X_{n} = i_{n})
+            
+                \label{markov_prop}
+        \end{equation}
+    
+        The Equation \ref{markov_prop} expresses the Markov property. This property defines that only the current state is needed to predict the future state \citep{Blitzstein2014,Estacio2022, Mishra2007}. This statement is expressed in the conditional probability \(P(X_{n+1} = j|X_{n}=i_{n})\), i.e., the probability of observing state $j$ at step $n+1$, given the occurrence of state $i$ at step $n$, with $i,j \in \vec{s}$
+    
+        The behavior of the Markov chain is described by the probabilities of the states contained in the vector $\vec{s}$ moving to any of the other states contained in that vector, including remaining in the initial state. As pointed by \citet{Mishra2007}, these probabilities, also called Transition Probabilities, can be calculated based on the class transitions over the observed data, as shown in Equation \ref{t_prob}.
+    
+        \begin{equation}
+            p_{ij}=P(X_{n+1}=j|X_{n}=i_{n})\approx\frac{n_{ij}}{\sum_{j=1}^{k}n_{ij}}
+            \label{t_prob}
+        \end{equation}
+    
+        where: $n_{ij}$ is the transitions occurring for the state $j$ at $n+1$, given the occurrence of the state $i$ at $n$; $\sum_{j=1}^{k}n_{ij}$ is the number of occurrences of the state $i$, regardless of the transition occurred.
+    
+        The probabilities of all possible transitions can be assembled into a matrix: the Transition Matrix $\tilde{M}$. Since the state vector $\vec{s}$ has dimension $(1xk)$, the matrix $\tilde{M}$ will be a square matrix $(kxk)$, as given in Equation \ref{tb:matrix_T}. The values of $p_{ij}$ are non-negative and the sum of each row of the $\tilde{M}$ must be equal to 1.
+    
+        \begin{equation}
+            \tilde{M} = [p_{ij}]_{kxk} = \begin{bmatrix}
+                p_{11} & p_{12} & \dots & p_{1k}\\
+                p_{21} & p_{22} & \dots & p_{2k}\\
+                \vdots & \vdots & \dots & \vdots\\
+                p_{k1} & p_{k2} & \dots & p_{kk}
+            \end{bmatrix}
+            \label{tb:matrix_T}
+        \end{equation}
+        
+        Another important property of the Markov chain is the stationary distribution of $\vec{X}$. Given a vector $\vec{q}_{0} = [q_{1}, q_{2}, \dots, q_{k}]$, with $q_{i} = P(X_{0}=i)$, representing the probabilities of the $k$ possible states of $\vec{s}$ occur at step 0 of the chain, thus $\vec{q}_{0}$ is the marginal distribution of $X_{0}$. The marginal distribution of $X_{1}$, step 1 of the chain, can be obtained by the multiplication $\vec{q}_{0} \times \tilde{M}$. The marginal distributions for the remaining steps $(X_{2}, X_{3}, \dots,X_{d})$ of the chain can be obtained following the same logic, as shown in Equation \ref{stat_distr}:    
+    
+        \begin{equation}
+            \vec{q}_{2} = \vec{q}_{1}\times\tilde{M} = \vec{q}_{0}\times\tilde{M^{2}}, \dots, \vec{q}_{d} =  \vec{q}_{0}\times\tilde{M^{d}}
+            \label{stat_distr}
+        \end{equation}
+    
+        Over long run, i.e., for large values of $d$, a convergence of the marginal distributions is reached $(\vec{q}_{d} = \vec{q}_{d+1} = \vec{q}_{d+2})$, therefore $\vec{q}_{d}$ is defined as the stationary distribution of $\vec{X}$. In other words, stationary distribution represents the marginal distribution of an initial state, in which any transition performed will result in a final state with the same marginal distribution as the initial state:  $\vec{q}_{d+1}=\vec{q}_{d}\times\tilde{M}|\vec{q}_{d+1}=\vec{q}_{d}$ \citep{Blitzstein2014}.
+    
+    \subsection{Drought State Transitions}
+
+        In order to assess the impact of anthropic changes on the drought class transitions, the entire SPI and SRI periods are divided into two sub-periods: pre- and post-anthropic changes periods.
+    
+        As pointed by \citet{Pimentel2022}, the soybean production in the west of the Brazilian state of Bahia, where the analyzed basin is located, showed a strong growth trend starting in 1985, rapidly increasing its percentage of participation in Brazilian soy production between 1985 and 1995. In 2005, this region was already responsible for 4.50\% of the Brazilian soy production.
+    
+        According to the above-metioned information, it was decided to divide the annual time series of SPI-12 and SRI-12 (1935-2020) into the pre-anthropic change period (P1), from 1935 to 1984 (49 years), and the post-anthropic change period (P2), from 1985 to 2020 (36 years).
+
+        To determine the transitions between the drought classes, the continuous values of the SPI and SRI time series in both periods were converted into drought classes. For this conversion, the classification presented by \citet{mckee1993} was adapted. This adapted classification was similar to the one adopted by \citet{Estacio2022}. 
+        
+        The Table \ref{tb:drought_class} shows the drought classes adopted in this study and compares it with the classification presented by \citet{mckee1993}. The Severe and Extreme Drought classes were aggregated into a single class: Severe or Extreme Drought (SED). Extreme Drought events have a low probability of occurrence, therefore, it is plausible that this event occurs in only one of the analyzed periods. In order to standardize the possible transition states in periods P1 and P2 and, consequently, their transition matrices, it was decided to group these two drought classes.
+
+        With the continuous SPI-12 and SRI-12 values converted into drought classes (Table \ref{tb:drought_class}), the transitions matrices were determined with Equation \ref{t_prob}. Four transition matrices were determined: i) SPI-12 in P1 periods, ii) SPI-12 in P2 period, iii) SRI-12 in P1 period and iv) SRI-12 in P2 period. These transition matrices were used to determine the stationary distribution of each respective Markov chain with the procedure presented in Equation \ref{stat_distr}.
+
+        
+        \begin{table*}[pos=h]
+            \caption{
+                Adopted drought classes for meteorological (SPI) and hydrological (SRI) droughts
+                }
+            \label{tb:drought_class}
+            \begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}} c c c}
+                \toprule
+                    Index Value & \citet{mckee1993} & Adopted drought classes\\
+                \midrule
+                    $SPI, SRI \geq 0$ & No Drought & No Drought (ND)\\
+                    $-1.0 < SPI,SRI < 0$ & mild Drought & mild Drought (mD) \\
+                    $-1.5 < SPI,SRI \leq -1.0$ & Moderate Drought & Moderate Drought (MD) \\
+                    $-2.0 < SPI,SRI \leq -1.5$ & Severe Drought & \multirow{2}{*}{Severe or Extreme Drought (SED)}\\
+                    $SPI,SRI \leq -2.0$ & Extreme Drought & \\
+                \bottomrule
+                \footnotesize Source: adapted from \citet{mckee1993, Estacio2022}
+                \end{tabular*}
+            \end{table*}
+        
+    \subsection{Minimum Reference Streamflow}
+        Minimum Reference Streamflows (MRS) are important metrics for water resources management and planning, as they provide information about the basin's water availability. 
+        
+        In this study, the MRS were used to evaluate the basin's water availability throughout the evaluated period, seeking to establish relationships between its behavior and the anthropic modifications induced in the analyzed basin.
+        
+        For this purpose, the entire period (1935 - 2020) gave rise to six subperiods, as presented in Table \ref{tb:sub_periods_min_flow}. This subdivision was arbitrary, however it was attempted to standardize the duration of each subperiod and the year 1985 was considered as the reference point for defining the periods of pre- and post anthropic change, as well as in the analysis of drought state transitions
+
+        \begin{table}[width=.9\linewidth, cols=5, pos=h]
+            \caption{
+            Subperiods considered for analysis of the minimum reference streamflow
+            }
+            \label{tb:sub_periods_min_flow}
+            \begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}} c c c}
+            \toprule
+                Subperiod & Interval & Anthropic Change\\
+            \midrule
+                SP1 & 1935 - 1954 (20 yrs) & Pre-Change \\
+                SP2 & 1955 - 1969 (15 yrs) & Pre-Change \\
+                SP3 & 1970 - 1984 (15 yrs) & Pre-Change \\
+                SP4 & 1985 - 2000 (16 yrs) & Post-Change \\
+                SP5 & 2001 - 2010 (10 yrs) & Post-Change \\
+                SP6 & 2011 - 2020 (10 yrs) & Post-Change \\
+            \bottomrule
+            \end{tabular*}
+        \end{table}
+
+        Two MRS were adopted: $Q_{95}$ and $Q_{7,10}$, determined for each subperiod in Table \ref{tb:sub_periods_min_flow}. In addition, a trend analysis was performed on the annual minimum daily streamflow time serie from 1935 to 2020 using the non-parametric Mann-Kendall test and the Sen's slope. More information about the Mann-Kendall test and Sen's slope (MKS) can be found at \citet{Lima2022}
+
+        The $Q_{95}$ represents the streamflow associated with a exceedence probability of 95\%, i.e, this streamflow remains in the watercourse at least 95\% of the time \citep{Abreu2022}. In order to determine it, the Flow-Duration Curves (FDC) for each subperiod were determined. The FDC's determination considered all daily observations of each subperiod, without moving averages to eliminate day-to-day variations.
+
+        The FDC establishes the relationship between the streamflows and their exceedance probability, i.e., the percentage of time that this flow is exceeded or equaled in the entire reference period used in its determination. The excedeence probability is the complement of the non-excedeence probability, thus the FDC can be determined with the CDF of the used data \citep{Abreu2022, Verma2016}.
+
+        In this study, the FDC for each subperiod were determined empirically with the percentiles of their daily streamflow time series. Percentiles divide a data sample, sorted in ascending order, into 100 parts. For each of these parts, a non-exceedance probability can be associated such that the $n$-percentile has $n\%$ of non-exceedance probability. In this way, the exceedance probabilities and, consequently, the FDC curve can be determined with the complement of the non-exceedance probabilities of percentiles of the daily streamflow data for each subperiod.
+
+        The $Q_{7,10}$, in turn, indicates the minimum 7-day moving average annual of streamflow associated with a 10-year recurrence period, i.e., it is expected that this average streamflow will be exceeded on average of 9 out every 10 years. \citep{Reilly2003}. For its determination, the following four steps were adopted: i) determination of 7-day moving average of daily streamflow time serie; ii) selection of the minimum value of this moving average for each year, giving rise to a time series of annual minima; iii) fitting this time series of annual minima to a CDF, in this study, the Left-Skewed CDF Gumbel was adopted and iv) Obtaining the $Q_{7,10}$ with the Left-Skewed CDF Gumbel inverse function, considering a non-exceedance probability of 0.1\%, i.e., a 10-year recurrence period.
+
+    

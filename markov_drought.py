@@ -84,7 +84,8 @@ def plot_transition_matrix(list_df, list_titles, output_path):
     ax2.set_title(list_titles[1], loc = "left")
     ax3.set_title(list_titles[2], loc = "left")
     ax4.set_title(list_titles[3], loc = "left")
-    fig.savefig("{}.png".format(output_path), dpi = 600, bbox_inches = "tight", facecolor = "w")
+    fig.savefig("{}_600.png".format(output_path), dpi = 600, bbox_inches = "tight", facecolor = "w")
+    fig.savefig("{}_300.png".format(output_path), dpi = 300, bbox_inches = "tight", facecolor = "w")
 
 
     return ("#### Arquivo Criado - {}!####".format(output_path))

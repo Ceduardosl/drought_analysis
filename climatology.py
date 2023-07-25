@@ -16,14 +16,18 @@ ax.bar(EPQ_clim.Q.index, EPQ_clim.Q,
     tick_label = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"])
 ax.set_ylabel("Streamflow (m³/s)")
 ax.set_title("b) Streamflow - Climatology", loc = "left")
-fig.savefig("Figuras/Vazao_Clim.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Vazao_Clim_600.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig.savefig("Figuras/Vazao_Clim_300.png", dpi = 300, bbox_inches = "tight", facecolor = "w")
+
 #%%
 fig1, ax1 = plt.subplots(dpi = 600)
 ax1.bar(EPQ_clim.Pr.index, EPQ_clim.Pr,
     tick_label = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"])
 ax1.set_ylabel("Precipitation (mm)")
 ax1.set_title("a) Precipitation - Climatology", loc = "left")
-fig1.savefig("Figuras/Pr_Clim.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig1.savefig("Figuras/Pr_Clim_600.png", dpi = 600, bbox_inches = "tight", facecolor = "w")
+fig1.savefig("Figuras/Pr_Clim_300.png", dpi = 300, bbox_inches = "tight", facecolor = "w")
+
 #%%
 fig2, ax2 = plt.subplots(dpi = 600)
 ax2.bar(EPQ_clim.ETP.index, EPQ_clim.ETP,
